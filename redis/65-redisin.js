@@ -70,7 +70,8 @@ function RedisInNode(n) {
 		  node.send(msg); 
 		}
 		var ex_type = function(k_type){
-			//IF-ELSE-IF for speed			
+			var returnvar = null;
+            //IF-ELSE-IF for speed			
 			if(k_type === 'set'){
 				client['SMEMBERS'](k, rc);
 			}else if(k_type === 'hash'){
@@ -89,6 +90,7 @@ function RedisInNode(n) {
 			if (k) {
 				if(n.structtype==="auto"){
 					client.TYPE(k, function(err, k_type){
+                      //uses the 'TYPE' command to figure out the key type
 					  ex_type(k_type);						
 					})
 				}else{
@@ -101,7 +103,27 @@ function RedisInNode(n) {
     });
 }
 
+function RedisKeysNode(n) {
+    RED.nodes.createNode(this,n);
+    var node = this;
+    this.port = n.port||"6379";
+    this.hostname = n.hostname||"127.0.0.1";
+    this.keyname = n.keyname || "*";
+	
+    this.client = redisConnectionPool.get(this.hostname,this.port);
+	var client = this.client;
+    this.on("input", function(msg) {
+        
+        msg.payload = client.keys(node.keyname, function(err, reply){
+            msg.payload = reply;
+            node.send(msg);
+        });
+
+    });
+}
+
 RED.nodes.registerType("redis in",RedisInNode);
+RED.nodes.registerType("redis keys",RedisKeysNode);
 
 RedisInNode.prototype.close = function() {
     redisConnectionPool.close(this.client);

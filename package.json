@@ -1,0 +1,24 @@
+{
+  "name": "node-red-web-nodes",
+  "version": "0.0.1",
+  "description": "Web authoring, hosting, and administration nodes for the node-red project",
+  "main": "null",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TJKoury/node-red-web-nodes.git"
+  },
+  "author": "TJKoury",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TJKoury/node-red-web-nodes/issues"
+  },
+  "homepage": "https://github.com/TJKoury/node-red-web-nodes",
+  "dependencies": {
+    "browserify": "^4.1.11",
+    "inliner": "^0.1.16",
+    "jshint": "^2.5.1"
+  }
+}

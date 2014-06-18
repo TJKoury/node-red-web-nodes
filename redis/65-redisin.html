@@ -119,3 +119,86 @@
         }
     });
 </script>
+
+<script type="text/x-red" data-template-name="redis keys">
+    <div class="form-row node-input-hostname">
+        <label for="node-input-hostname"><i class="icon-bookmark"></i> Host</label>
+        <input class="input-append-left" type="text" id="node-input-hostname" placeholder="127.0.0.1" style="width: 40%;" ><button id="node-input-hostname-lookup" class="btn input-append-right"><span class="caret"></span></button>
+        <label for="node-input-port" style="margin-left: 10px; width: 35px; "> Port</label>
+        <input type="text" id="node-input-port" placeholder="6379" style="width:45px">
+    </div>
+    <div class="form-row">
+        <label for="node-input-key"><i class="icon-briefcase"></i> Key</label>
+        <input type="text" id="node-input-keyname" placeholder="*">
+        
+    </div>
+    <div class="form-tips">
+        This node allows listing keys from a REDIS database.  Uses
+    regular REDIS key query syntax.  Defaults to returning all keys.<br>
+    </div>
+    <style>
+      .spacer.caret{
+        margin-left:10px; 
+      }
+      .dropdown-toggle p{float:left;padding:0px;margin:0px;}
+    </style>
+</script>
+
+<script type="text/x-red" data-help-name="redis keys">
+	<p>A Redis key node.  Will list keys from the REDIS database matching the keyname.  Uses
+    regular REDIS key query syntax.  For more information visit <a href="http://redis.io/" target="_new">the Redis site</a>.</p>
+</script>
+
+<script type="text/javascript">
+
+    RED.nodes.registerType('redis keys',{
+        category: 'storage-input',
+        color:"#fffaaa",
+        defaults: {
+            hostname: { value:"127.0.0.1",required:true},
+            port: { value: 6379,required:true},
+            keyname: {value:"*"}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "redis.png",
+        align: "right",
+        label: function() {
+            return "REDIS "+this.hostname+":"+this.port+" KEYS: "+this.keyname;
+        },
+        oneditprepare: function() {
+            var availableServers = [];
+            var matchedServers = {};
+            RED.nodes.eachNode(function(node) {
+                if (node.type == "redis in" && node.hostname && node.port && !matchedServers[node.hostname+":"+node.port]) {
+                    var label = node.hostname+":"+node.port;
+                    matchedServers[label] = true;
+                    availableServers.push({
+                        label:label,
+                        value:node.hostname,
+                        port:node.port
+                    });
+                }
+            });
+            $( "#node-input-hostname" ).autocomplete({
+                minLength: 0,
+                source: availableServers,
+                select: function( event, ui ) {
+                    $("#node-input-port").val(ui.item.port);
+                }
+            });
+            var tt = this;
+            tt._acOpen = false;
+            $( "#node-input-hostname" ).on( "autocompleteclose", function( event, ui ) { tt._acOpen = false;} );
+            $( "#node-input-hostname-lookup" ).click(function(e) {
+                if (tt._acOpen) {
+                    $( "#node-input-hostname" ).autocomplete( "close");
+                } else {
+                    $( "#node-input-hostname" ).autocomplete( "search", "" );
+                }
+                tt._acOpen = !tt._acOpen;
+                e.preventDefault();
+            });
+        }
+    });
+</script>
