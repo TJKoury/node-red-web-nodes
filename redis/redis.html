@@ -124,6 +124,11 @@ var commands = {"APPEND":{"summary":"Append a value to a key","complexity":"O(1)
             }
             
             var set_form = function(){
+                
+                if(!this.value){
+                    return null;
+                }
+                
                 var c = commands[$(this).val()];
                 var help_text = c.summary+". <br/><br/>Complexity: "
                                 +(c.complexity||'N/A')+". <br/><br/>Since version: "
@@ -132,8 +137,12 @@ var commands = {"APPEND":{"summary":"Append a value to a key","complexity":"O(1)
                 $("#command-arguments").html('');
                 
                 for(argu in c.arguments){
-
-                    var input_element = '<input type="text" data-name="'+c.arguments[argu].name+'" class="command-argument" placeholder="'+
+       
+                    var input_element = '<input type="text" data-name="'+
+                                        c.arguments[argu].name
+                                        +'" value="'+
+                                        ((tt.command===this.value)?tt.arguments[argu]:"")
+                                        +'" class="command-argument" placeholder="'+
                                         c.arguments[argu].name
                                         +'">';
                     
@@ -141,7 +150,7 @@ var commands = {"APPEND":{"summary":"Append a value to a key","complexity":"O(1)
                         input_element =  '<select type="text" data-name="'+c.arguments[argu].name+'" ="command-argument" style="width: 150px;">';
                         
                         for(en in c.arguments[argu]["enum"]){
-                            input_element += '<option value="'+c.arguments[argu]["enum"][en]+'">'+
+                            input_element += '<option '+((tt.arguments[argu]===c.arguments[argu]["enum"][en])?"selected ":"")+' value="'+c.arguments[argu]["enum"][en]+'">'+
                                              c.arguments[argu]["enum"][en]+'</option>';
                         }
                         input_element += '</select>';
@@ -172,7 +181,7 @@ var commands = {"APPEND":{"summary":"Append a value to a key","complexity":"O(1)
                 that.argument_names.push($(this).attr("data-name"));
                 that.arguments.push($(this).val());
             });
-            console.log(this);
+
         }
     });
 </script>
