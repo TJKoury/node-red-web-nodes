@@ -65,7 +65,8 @@ function RedisNode(n) {
     this.on("input", function(msg) {
 		
         var rc = function(err, reply){
-		  msg.payload = reply;					  
+          
+		  msg.payload = reply||err;					  
 		  node.send(msg); 
 		}
         
@@ -74,8 +75,8 @@ function RedisNode(n) {
         for(var i=0;i<node.arguments.length;i++){
             resolved_arguments.push(msg.payload[node.arguments[i]]);
         }
-
-        client[node.command](resolved_arguments.join(" "), rc);
+        
+        client[node.command](resolved_arguments, rc);
     });
 }
 
