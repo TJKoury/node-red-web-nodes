@@ -72,17 +72,16 @@ var commands = {"APPEND":{"summary":"Append a value to a key","complexity":"O(1)
         defaults: {
             hostname: { value:"127.0.0.1",required:true},
             port: { value: 6379,required:true},
-            name: {value:""},
-            key: {value:""},
-            keytype:{value:"REDISKEY", required:true},
-			structtype:{value:"auto", required:true}
+            command: {value:""},
+            arguments:{value:[], required:true}
         },
         inputs:1,
         outputs:1,
         icon: "redis.png",
         align: "right",
         label: function() {
-            return this.name;
+            
+            return "REDIS:"+ this.command+" "+this.arguments.join(" ");
         },
         oneditprepare: function() {
             var availableServers = [];
@@ -120,7 +119,9 @@ var commands = {"APPEND":{"summary":"Append a value to a key","complexity":"O(1)
             
             //Build command dropdown
             for(x in commands){
-                $("#node-input-command").append('<option value="'+x+'">'+x+'</option>');
+                console.log(x);
+                console.log(tt.command);
+                $("#node-input-command").append('<option '+((tt.command===x)?"selected ":"")+'value="'+x+'">'+x+'</option>');
             }
             
             var set_form = function(){
@@ -139,7 +140,7 @@ var commands = {"APPEND":{"summary":"Append a value to a key","complexity":"O(1)
                                         +'">';
                     
                     if("enum" in c.arguments[argu]){
-                        input_element =  '<select type="text" id="node-input-structtype" style="width: 150px;">';
+                        input_element =  '<select type="text" class="command-argument" style="width: 150px;">';
                         
                         for(en in c.arguments[argu]["enum"]){
                             input_element += '<option value="'+c.arguments[argu]["enum"][en]+'">'+
@@ -161,9 +162,17 @@ var commands = {"APPEND":{"summary":"Append a value to a key","complexity":"O(1)
             };
             
             $("#node-input-command").on("change", set_form);
-            set_form.call($("#node-input-command"));
-           
             
+            set_form.call($("#node-input-command"));
+
+        },
+        oneditsave: function(){
+            var that = this;
+            this.arguments = [];
+            $(".command-argument").each(function(){
+                that.arguments.push($(this).val());
+            });
+            console.log(this);
         }
     });
 </script>
