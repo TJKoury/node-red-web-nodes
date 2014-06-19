@@ -58,19 +58,24 @@ function RedisNode(n) {
     var node = this;
     this.port = n.port||"6379";
     this.hostname = n.hostname||"127.0.0.1";
-    this.key = n.key;
-    this.keytype = n.keytype;
-    this.structtype = n.structtype;
-	
+    this.arguments = n.arguments;
+    this.command = n.command;
     this.client = redisConnectionPool.get(this.hostname,this.port);
 	var client = this.client;
     this.on("input", function(msg) {
-		var rc = function(err, reply){
+		
+        var rc = function(err, reply){
 		  msg.payload = reply;					  
 		  node.send(msg); 
 		}
         
-        //client[command](k, rc);
+        var resolved_arguments = [];
+        
+        for(var i=0;i<node.arguments.length;i++){
+            resolved_arguments.push(msg.payload[node.arguments[i]]);
+        }
+
+        client[node.command](resolved_arguments.join(" "), rc);
     });
 }
 

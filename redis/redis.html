@@ -119,8 +119,7 @@ var commands = {"APPEND":{"summary":"Append a value to a key","complexity":"O(1)
             
             //Build command dropdown
             for(x in commands){
-                console.log(x);
-                console.log(tt.command);
+
                 $("#node-input-command").append('<option '+((tt.command===x)?"selected ":"")+'value="'+x+'">'+x+'</option>');
             }
             
@@ -133,14 +132,13 @@ var commands = {"APPEND":{"summary":"Append a value to a key","complexity":"O(1)
                 $("#command-arguments").html('');
                 
                 for(argu in c.arguments){
-                    console.log(argu);
-                    
-                    var input_element = '<input type="text" class="command-argument" id="node-input-name" placeholder="'+
+
+                    var input_element = '<input type="text" data-name="'+c.arguments[argu].name+'" class="command-argument" placeholder="'+
                                         c.arguments[argu].name
                                         +'">';
                     
                     if("enum" in c.arguments[argu]){
-                        input_element =  '<select type="text" class="command-argument" style="width: 150px;">';
+                        input_element =  '<select type="text" data-name="'+c.arguments[argu].name+'" ="command-argument" style="width: 150px;">';
                         
                         for(en in c.arguments[argu]["enum"]){
                             input_element += '<option value="'+c.arguments[argu]["enum"][en]+'">'+
@@ -164,12 +162,14 @@ var commands = {"APPEND":{"summary":"Append a value to a key","complexity":"O(1)
             $("#node-input-command").on("change", set_form);
             
             set_form.call($("#node-input-command"));
-
+            
         },
         oneditsave: function(){
             var that = this;
             this.arguments = [];
+            this.argument_names = [];
             $(".command-argument").each(function(){
+                that.argument_names.push($(this).attr("data-name"));
                 that.arguments.push($(this).val());
             });
             console.log(this);
