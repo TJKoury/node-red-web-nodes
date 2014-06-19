@@ -60,7 +60,8 @@
 
 <script type="text/x-red" data-help-name="redis in">
 	<p>A Redis query node.  Will query either by string literal key, or by a key provided as a named parameter specified in the 'key' field.</p>
-	<p>To run this you need a local Redis server running. For details see <a href="http://redis.io/" target="_new">the Redis site</a>.</p>
+	<p>Key type is either explicitly specified or auto-detected by querying the REDIS database if 'type' is set to 'Auto' (will incur a roundtrip penalty).</p>
+    <p>To run this you need a local Redis server running. For details see <a href="http://redis.io/" target="_new">the Redis site</a>.</p>
 </script>
 
 <script type="text/javascript">
