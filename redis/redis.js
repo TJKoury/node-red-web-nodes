@@ -75,8 +75,12 @@ function RedisNode(n) {
         for(var i=0;i<node.arguments.length;i++){
             resolved_arguments.push(msg.payload[node.arguments[i]]);
         }
-        
-        client[node.command](resolved_arguments, rc);
+       
+        var args = node.command.split(" ");
+        if(args.length>1){
+            resolved_arguments.unshift(args[1]);
+        }
+        client[args[0]](resolved_arguments, rc);
     });
 }
 
