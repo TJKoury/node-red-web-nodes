@@ -35,12 +35,12 @@
     </div>
     <style>
        #command-arguments label{
-        width:160px;
+        width:250px;
        }
        .form-row input.command-argument {
-        width: 60%;
+        width: 200px;
         position: relative;
-        left: -60px;
+        left: -150px;
         top: 3px;
        }
        .small{
@@ -59,8 +59,7 @@
 </script>
 
 <script type="text/x-red" data-help-name="redis">
-	<p>A Redis.  Will query either by string literal key, or by a key provided as a named parameter specified in the 'key' field.</p>
-	<p>Key type is either explicitly specified or auto-detected by querying the REDIS database if 'type' is set to 'Auto' (will incur a roundtrip penalty).</p>
+	<p>A Redis Node with all commands available and configurable.</p>
     <p>To run this you need a local Redis server running. For details see <a href="http://redis.io/" target="_new">the Redis site</a>.</p>
 </script>
 
@@ -81,7 +80,7 @@ var commands = {"APPEND":{"summary":"Append a value to a key","complexity":"O(1)
         align: "right",
         label: function() {
             
-            return "REDIS:"+ this.command+" "+this.arguments.join(" ");
+            return "REDIS:  "+ this.command+" "+this.arguments.join(" ");
         },
         oneditprepare: function() {
             var availableServers = [];
@@ -147,7 +146,7 @@ var commands = {"APPEND":{"summary":"Append a value to a key","complexity":"O(1)
                                         +'">';
                     
                     if("enum" in c.arguments[argu]){
-                        input_element =  '<select type="text" data-name="'+c.arguments[argu].name+'" ="command-argument" style="width: 150px;">';
+                        input_element =  '<select type="text" data-name="'+c.arguments[argu].name+'" ="command-argument">';
                         
                         for(en in c.arguments[argu]["enum"]){
                             input_element += '<option '+((tt.arguments[argu]===c.arguments[argu]["enum"][en])?"selected ":"")+' value="'+c.arguments[argu]["enum"][en]+'">'+
@@ -161,7 +160,9 @@ var commands = {"APPEND":{"summary":"Append a value to a key","complexity":"O(1)
                                                     c.arguments[argu].name 
                                                     +'</b> <p class="small">('+
                                                     c.arguments[argu].type
-                                                    +')</p><br/><p class="msg-label">msg.payload.</p></label>'+
+                                                    +')</p><br/><p class="msg-label">'+
+                                                    (("enum" in c.arguments[argu])?" ":"msg.payload.")
+                                                    +'</p></label>'+
                                                     input_element
                                                     +'</div>');
                 
