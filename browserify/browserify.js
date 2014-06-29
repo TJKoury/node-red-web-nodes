@@ -30,7 +30,12 @@
             var b = browserify();
 
             b.add(node.filein);
-            b.bundle().pipe(fs.createWriteStream(node.fileout));
+            //b.bundle().pipe(fs.createWriteStream(node.fileout));
+            b.bundle({}, function(err, src){
+              msg.payload = src;
+              node.send(msg);
+            });
+        
         });
     }
 
