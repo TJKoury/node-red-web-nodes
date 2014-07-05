@@ -15,6 +15,7 @@
  **/ 
  
  var browserify = require('browserify'),
+ 
  fs = require('fs');
  module.exports = function(RED) {
     "use strict";
@@ -22,15 +23,22 @@
     function BrowserifyNode(n) {
         RED.nodes.createNode(this,n);
         this.filein = n.filein;
-        this.fileout = n.fileout;
+
         this.appendNewline = n.appendNewline;
         this.overwriteFile = n.overwriteFile;
+        //this.shim = n.shim;
         var node = this;
         this.on("input",function(msg) {
+            
+            //TODO add shim;
+            var globalShim = require('browserify-global-shim').configure({
+              'jQuery': '$'
+            }) ;
+            
             var b = browserify();
 
-            b.add(node.filein);
-            //b.bundle().pipe(fs.createWriteStream(node.fileout));
+            b.add(node.filein).transform(globalShim);
+
             b.bundle({}, function(err, src){
               msg.payload = src;
               node.send(msg);

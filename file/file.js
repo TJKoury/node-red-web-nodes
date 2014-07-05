@@ -42,7 +42,7 @@
                     if (this.overwriteFile) {
                         fs.writeFile(filename, data, function (err) {
                             if (err) node.warn('Failed to write to file : '+err);
-                            //console.log('Message written to file',filename);
+                           console.log('Message written to file',filename);
                         });
                     }
                     else {

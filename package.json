@@ -22,5 +22,8 @@
     "jshint": "^2.5.1",
     "redis": "^0.10.3",
     "uglifyify": "^2.4.0"
+  },
+  "devDependencies": {
+    "browserify-global-shim": "^1.0.0"
   }
 }
