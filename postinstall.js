@@ -1,5 +1,10 @@
-fs = require('fs');
+var fs = require('fs');
+var assets = require('./assets.js');
 
+assets.files.forEach(function(file_metadata){
 
-fs.createReadStream('./browserify/wizard_hat_blue.png')
-.pipe(fs.createWriteStream('../../public/icons/wizard_hat_blue.png'));
+    fs.createReadStream(file_metadata.file)
+    .pipe(fs.createWriteStream(file_metadata.path));
+
+});
+
