@@ -27,6 +27,7 @@
     "browserify-global-shim": "^1.0.0"
   },
   "scripts":{
-    "postinstall":"node ./postinstall.js"
+    "postinstall":"node ./postinstall.js",
+    "preuninstall":"node ./uninstall.js"
   }
 }
