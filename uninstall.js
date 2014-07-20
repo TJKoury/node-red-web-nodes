@@ -1,3 +1,6 @@
 var fs = require('fs');
+var assets = require('./assets.js');
 
-fs.unlinkSync('../../public/icons/wizard_hat_blue.png');
+assets.files.forEach(function(file_metadata){
+    fs.unlinkSync(file_metadata.path);
+});
