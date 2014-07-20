@@ -29,5 +29,12 @@
   "scripts":{
     "postinstall":"node ./postinstall.js",
     "preuninstall":"node ./uninstall.js"
+  },
+  "node-red":{
+      "nodes":{
+          "browserify": "browserify/browserify.js",
+          "redis": "redis/redis.js",
+          "http": "http/999-httpin_regex.js"
+      }
   }
 }
