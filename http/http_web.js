@@ -107,3 +107,39 @@ function HTTPInRegex(n) {
     }
 }
 RED.nodes.registerType("http in regex",HTTPInRegex);
+
+function HTTPWebOut(n) {
+    RED.nodes.createNode(this,n);
+    var node = this;
+    this.on("input",function(msg) {
+        if (msg.res) {
+            if (msg.headers) {
+               msg.res.set(msg.headers);
+            }
+            var statusCode = msg.statusCode || 200;
+            if (typeof msg.payload == "object" && !Buffer.isBuffer(msg.payload)) {
+                msg.res.set('content-type', 'application/json');
+                msg.res.jsonp(statusCode,msg.payload);
+            } else {
+                if (msg.res.get('content-length') == null) {
+                    var len;
+                    if (msg.payload == null) {
+                        len = 0;
+                    } else if (typeof msg.payload == "number") {
+                        len = Buffer.byteLength(""+msg.payload);
+                    } else {
+                        len = Buffer.byteLength(msg.payload);
+                    }
+                    msg.res.set('content-length', len);
+                }else{
+                    msg.res.set('content-length', Buffer.byteLength(msg.payload));
+                }
+                msg.res.send(statusCode,msg.payload);
+            }
+        } else {
+            node.warn("No response object");
+        }
+    });
+}
+RED.nodes.registerType("http web out",HTTPWebOut);
+
