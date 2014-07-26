@@ -15,53 +15,18 @@
  **/
 
 var RED = require(process.env.NODE_RED_HOME+"/red/red");
-var util = require("util");
-var redis = require("redis");
-
+var redis = require('redis');
+var util = require('util');
 var hashFieldRE = /^([^=]+)=(.*)$/;
-
-var redisConnectionPool = function() {
-    var connections = {};
-    var obj = {
-        get: function(host,port) {
-            var id = host+":"+port;
-            if (!connections[id]) {
-                connections[id] = redis.createClient(port,host);
-                connections[id].on("error",function(err) {
-                        util.log("[redis] "+err);
-                });
-                connections[id].on("connect",function() {
-                        util.log("[redis] connected to "+host+":"+port);
-                });
-                connections[id]._id = id;
-                connections[id]._nodeCount = 0;
-            }
-            connections[id]._nodeCount += 1;
-            return connections[id];
-        },
-        close: function(connection) {
-            connection._nodeCount -= 1;
-            if (connection._nodeCount == 0) {
-                if (connection) {
-                    clearTimeout(connection.retry_timer);
-                    connection.end();
-                }
-                delete connections[connection._id];
-            }
-        }
-    };
-    return obj;
-}();
 
 function RedisNode(n) {
     RED.nodes.createNode(this,n);
     var node = this;
-    this.port = n.port||"6379";
-    this.hostname = n.hostname||"127.0.0.1";
+
     this.arguments = n.arguments;
     this.command = n.command;
-    this.client = redisConnectionPool.get(this.hostname,this.port);
-	var client = this.client;
+    this.server =  RED.nodes.getNode(n.server);
+    var client = this.server.server;
     this.on("input", function(msg) {
 		
         var rc = function(err, reply){
@@ -81,14 +46,56 @@ function RedisNode(n) {
             resolved_arguments.unshift(args[1]);
         }
         client[args[0]](resolved_arguments, rc);
+        
+        this.close = function(){
+          client.close(client);
+        }
     });
+  
 }
 
 
 RED.nodes.registerType("redis",RedisNode);
 
-
-RedisNode.prototype.close = function() {
-    redisConnectionPool.close(this.client);
+function RedisServerNode(n) {
+    RED.nodes.createNode(this,n);
+    
+    var redisConnectionPool = function() {
+      var connections = {};
+      
+      var obj = {
+          get: function(host,port) {
+              var id = host+":"+port;
+              if (!connections[id]) {
+                  connections[id] = redis.createClient(port,host);
+                  connections[id].on("error",function(err) {
+                          util.log("[redis] "+err);
+                  });
+                  connections[id].on("connect",function() {
+                          util.log("[redis] connected to "+host+":"+port);
+                  });
+                  connections[id]._id = id;
+                  connections[id]._nodeCount = 0;
+              }
+              connections[id]._nodeCount += 1;
+              return connections[id];
+          },
+          close: function(connection) {
+              connection._nodeCount -= 1;
+              if (connection._nodeCount == 0) {
+                  if (connection) {
+                      clearTimeout(connection.retry_timer);
+                      connection.end();
+                  }
+                  delete connections[connection._id];
+              }
+          }
+      };
+      return obj;
+    }();
+    
+    this.server = redisConnectionPool.get(this.host, this.port);
 }
+
+RED.nodes.registerType("redis-server",RedisServerNode);
 
