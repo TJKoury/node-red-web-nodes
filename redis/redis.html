@@ -69,8 +69,7 @@ var commands = {"APPEND":{"summary":"Append a value to a key","complexity":"O(1)
         category: 'web-storage-output',
         color:"#fffaaa",
         defaults: {
-            hostname: { value:"127.0.0.1",required:true},
-            port: { value: 6379,required:true},
+            server: {value:"", type:"redis-server"},
             command: {value:""},
             arguments:{value:[], required:true}
         },
