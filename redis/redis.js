@@ -60,6 +60,9 @@ RED.nodes.registerType("redis",RedisNode);
 function RedisServerNode(n) {
     RED.nodes.createNode(this,n);
     
+    this.host = n.host;
+    this.port = n.port;
+    
     var redisConnectionPool = function() {
       var connections = {};
       
