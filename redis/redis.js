@@ -98,6 +98,7 @@ function RedisServerNode(n) {
     }();
     
     this.server = redisConnectionPool.get(this.host, this.port);
+    this.server.close = redisConnectionPool.close;
 }
 
 RED.nodes.registerType("redis-server",RedisServerNode);
