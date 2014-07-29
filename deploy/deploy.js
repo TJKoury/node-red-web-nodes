@@ -28,7 +28,7 @@
         
         this.on("input",function(msg) {
         
-            new Inliner(this.filein, function(html){
+            new inliner(this.filein, function(html){
                 if(fs.existsSync(node.fileout)){
                     fs.writeFileSync(node.fileout, html);
                 }
