@@ -27,15 +27,21 @@
         var node = this;
         
         this.on("input",function(msg) {
-        
+            
+        try{
             new inliner(this.filein, function(html){
-                if(fs.existsSync(node.fileout)){
+                
+                
+                if(node.fileout){
                     fs.writeFileSync(node.fileout, html);
                 }
                 msg.payload = html;
                 node.send(msg);
-              
-            });
+               
+            }); 
+            }catch(e){
+                console.log(e);
+            }
         });
     };
     RED.nodes.registerType("deploy", inlinerNode);

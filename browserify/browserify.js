@@ -40,9 +40,9 @@
             b.add(node.filein).transform(globalShim);
 
             b.bundle({}, function(err, src){
-            if(fs.existsSync(node.fileout)){
+            
                 fs.writeFileSync(node.fileout, src);
-            }
+           
               msg.payload = src;
               node.send(msg);
             });
