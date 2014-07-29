@@ -23,11 +23,15 @@
     function inlinerNode(n) {
         RED.nodes.createNode(this,n);
         this.filein = n.filein;
+        this.fileout = n.fileout;
         var node = this;
         
         this.on("input",function(msg) {
         
             new Inliner(this.filein, function(html){
+                if(fs.existsSync(node.fileout)){
+                    fs.writeFileSync(node.fileout, html);
+                }
                 msg.payload = html;
                 node.send(msg);
               

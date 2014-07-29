@@ -23,7 +23,7 @@
     function BrowserifyNode(n) {
         RED.nodes.createNode(this,n);
         this.filein = n.filein;
-
+        this.fileout = n.fileout;
         this.appendNewline = n.appendNewline;
         this.overwriteFile = n.overwriteFile;
         //this.shim = n.shim;
@@ -40,6 +40,9 @@
             b.add(node.filein).transform(globalShim);
 
             b.bundle({}, function(err, src){
+            if(fs.existsSync(node.fileout)){
+                fs.writeFileSync(node.fileout, src);
+            }
               msg.payload = src;
               node.send(msg);
             });

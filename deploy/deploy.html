@@ -16,12 +16,12 @@
   <script type="text/x-red" data-template-name="deploy">
     <div class="form-row node-input-filein">
          <label for="node-input-filein"><i class="icon-file"></i> Entry Point</label>
-         <input type="text" id="node-input-filein" placeholder="./src/script.js">
+         <input type="text" id="node-input-filein" placeholder="./src/index.html">
     </div>
-    <!--<div class="form-row node-input-fileout">
+    <div class="form-row node-input-fileout">
          <label for="node-input-fileout"><i class="icon-file"></i> File Out</label>
-         <input type="text" id="node-input-fileout" placeholder="./dist/script.js">
-    </div>-->
+         <input type="text" id="node-input-fileout" placeholder="./dist/index.html">
+    </div>
     <div class="form-row">
         <label for="node-input-name"><i class="icon-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
@@ -37,7 +37,7 @@
         defaults: {
             name: {value:""},
             filein: {value:"",required:true},
-            //fileout: {value:"",required:true}
+            fileout: {value:"",required:false}
         },
         color:"#343434",
         inputs:1,
