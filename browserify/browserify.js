@@ -36,17 +36,19 @@
             }) ;
             
             var b = browserify();
+            if(fs.existsSync(node.filein)){
+                b.add(node.filein).transform(globalShim);
 
-            b.add(node.filein).transform(globalShim);
-
-            b.bundle({}, function(err, src){
-            
-                fs.writeFileSync(node.fileout, src);
-           
-              msg.payload = src;
-              node.send(msg);
+                b.bundle({}, function(err, src){
+                    console.error(err);
+                    fs.writeFileSync(node.fileout, src);
+               
+                  msg.payload = src;
+                  node.send(msg);
             });
-        
+            }else{
+                node.send(msg);
+            }
         });
     }
 
