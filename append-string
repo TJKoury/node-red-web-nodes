@@ -1,1 +1,0 @@
-$('.palette-scroll').append('<div class="palette-category"><div class="palette-header"><i class="expanded icon-chevron-down"></i><span>web</span></div><div class="palette-content" id="palette-output"></div></div>');
