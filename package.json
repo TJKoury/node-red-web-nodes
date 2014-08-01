@@ -19,14 +19,12 @@
   "homepage": "https://github.com/TJKoury/node-red-web-nodes",
   "dependencies": {
     "browserify": "^4.2.0",
-    "browserify-global-shim": "^1.0.0",
     "inliner": "^0.1.16",
     "jshint": "^2.5.1",
     "redis": "^0.10.3",
     "uglifyify": "^2.4.0"
   },
   "devDependencies": {
-    "browserify-global-shim": "^1.0.0"
   },
   "node-red": {
     "nodes": {
