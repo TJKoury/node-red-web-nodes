@@ -28,7 +28,7 @@ function FolderNode(n) {
     var node = this;
     this.on("input",function(msg) {
       
-                var file = (n.filepath=="URL")?((msg.req.url==="/")?node.defaultfile:msg.req.url):msg.payload[node.fileparametername];
+                var file = (n.filepath=="URL")?((msg.req.url==="/")?msg.req.url+node.defaultfile:msg.req.url):msg.payload[node.fileparametername];
         
 		var filePath = "."+decodeURIComponent((node.folderpath+"/"+file).replace(/[\/\/\\\\]{2,}/g,"/").split("?")[0]);
         if(fs.existsSync(filePath)){
