@@ -22,12 +22,13 @@ function FolderNode(n) {
     this.folderpath = n.folderpath;
     this.filepath = n.filepath;
     this.fileparametername = n.fileparametername;
-	this.listfiles = n.listfiles;
+    this.listfiles = n.listfiles;
+    this.defaultfile = n.defaultfile;	
 	
     var node = this;
     this.on("input",function(msg) {
       
-        var file = (n.filepath=="URL")?msg.req.url:msg.payload[node.fileparametername];
+                var file = (n.filepath=="URL")?((msg.req.url==="/")?node.defaultfile:msg.req.url):msg.payload[node.fileparametername];
         
 		var filePath = "."+decodeURIComponent((node.folderpath+"/"+file).replace(/[\/\/\\\\]{2,}/g,"/").split("?")[0]);
         if(fs.existsSync(filePath)){
