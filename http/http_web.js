@@ -43,69 +43,69 @@ function rawBodyParser(req, res, next) {
 }
 
 
-function HTTPInRegex(n) {
-    RED.nodes.createNode(this,n);
-    if (RED.settings.httpNodeRoot !== false) {
+function HTTPInRegex(n)  {
+        RED.nodes.createNode(this,n);
+        if (RED.settings.httpNodeRoot !== false) {
 
-        this.url = new RegExp(n.url);
-        this.method = n.method;
-        
-        var node = this;
+            this.url = new RegExp(n.url);
+            this.method = n.method;
 
-        this.errorHandler = function(err,req,res,next) {
-            node.warn(err);
-            res.send(500);
-        };
+            var node = this;
 
-        this.callback = function(req,res) {
-            if (node.method == "post") {
-                node.send({req:req,res:res,payload:req.body});
-            } else if (node.method == "get") {
-                node.send({req:req,res:res,payload:req.query});
-            } else {
-                node.send({req:req,res:res});
-            }
-        }
+            this.errorHandler = function(err,req,res,next) {
+                node.warn(err);
+                res.send(500);
+            };
 
-        var corsHandler = function(req,res,next) { next(); }
-
-        if (RED.settings.httpNodeCors) {
-            corsHandler = cors(RED.settings.httpNodeCors);
-            RED.httpNode.options(this.url,corsHandler);
-        }
-
-        if (this.method == "get") {
-            RED.httpNode.get(this.url,corsHandler,this.callback,this.errorHandler);
-        } else if (this.method == "post") {
-            RED.httpNode.post(this.url,corsHandler,jsonParser,urlencParser,rawBodyParser,this.callback,this.errorHandler);
-        } else if (this.method == "put") {
-            RED.httpNode.put(this.url,corsHandler,jsonParser,urlencParser,rawBodyParser,this.callback,this.errorHandler);
-        } else if (this.method == "delete") {
-            RED.httpNode.delete(this.url,corsHandler,this.callback,errorHandler);
-        }
-
-        this.on("close",function() {
-            var routes = RED.httpNode.routes[this.method];
-            for (var i = 0; i<routes.length; i++) {
-                if (routes[i].path == this.url) {
-                    routes.splice(i,1);
-                    //break;
+            this.callback = function(req,res) {
+                if (node.method == "post") {
+                    node.send({req:req,res:res,payload:req.body});
+                } else if (node.method == "get") {
+                    node.send({req:req,res:res,payload:req.query});
+                } else {
+                    node.send({req:req,res:res});
                 }
             }
+
+            var corsHandler = function(req,res,next) { next(); }
+
             if (RED.settings.httpNodeCors) {
-                var routes = RED.httpNode.routes['options'];
+                corsHandler = cors(RED.settings.httpNodeCors);
+                RED.httpNode.options(this.url,corsHandler);
+            }
+
+            if (this.method == "get") {
+                RED.httpNode.get(this.url,corsHandler,this.callback,this.errorHandler);
+            } else if (this.method == "post") {
+                RED.httpNode.post(this.url,corsHandler,jsonParser,urlencParser,rawBodyParser,this.callback,this.errorHandler);
+            } else if (this.method == "put") {
+                RED.httpNode.put(this.url,corsHandler,jsonParser,urlencParser,rawBodyParser,this.callback,this.errorHandler);
+            } else if (this.method == "delete") {
+                RED.httpNode.delete(this.url,corsHandler,this.callback,errorHandler);
+            }
+
+            this.on("close",function() {
+                var routes = RED.httpNode.routes[this.method];
                 for (var i = 0; i<routes.length; i++) {
                     if (routes[i].path == this.url) {
                         routes.splice(i,1);
                         //break;
                     }
                 }
-            }
-        });
-    } else {
-        this.warn("Cannot create http-in node when httpNodeRoot set to false");
+                if (RED.settings.httpNodeCors) {
+                    var route = RED.httpNode.route['options'];
+                    for (var j = 0; j<route.length; j++) {
+                        if (route[j].path == this.url) {
+                            route.splice(j,1);
+                            //break;
+                        }
+                    }
+                }
+            });
+        } else {
+            this.warn("Cannot create http-in node when httpNodeRoot set to false");
+        }
     }
-}
 RED.nodes.registerType("http in regex",HTTPInRegex);
 
 function HTTPWebOut(n) {

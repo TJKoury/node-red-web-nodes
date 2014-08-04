@@ -28,19 +28,25 @@ function FolderNode(n) {
     var node = this;
     this.on("input",function(msg) {
       
-                var file = (n.filepath=="URL")?((msg.req.url==="/")?msg.req.url+node.defaultfile:msg.req.url):msg.payload[node.fileparametername];
-        
-		var filePath = "."+decodeURIComponent((node.folderpath+"/"+file).replace(/[\/\/\\\\]{2,}/g,"/").split("?")[0]);
-        if(fs.existsSync(filePath)){
-          msg.res.sendfile(filePath);
+      var file = (n.filepath=="URL")?
+      ((msg.req.url==="/")?msg.req.url+node.defaultfile:msg.req.url)
+      :msg.payload[node.fileparametername];
+      console.log(file);
+      var filePath = "."+decodeURIComponent((node.folderpath+"/"+file).replace(/[\/\/\\\\]{2,}/g,"/").split("?")[0]);
+      
+      if(fs.existsSync(filePath)&&fs.lstatSync(filePath).isFile()){
+            msg.res.sendfile(filePath);
+      }else{
+        if(node.listfiles){
+         var listPath = filePath.split("/");
+         listPath = listPath.splice(0,listPath.length-1).join("/");
+         console.log(listPath);
+         msg.res.send(JSON.stringify(fs.readdirSync(listPath)));
         }else{
-			if(node.listfiles){
-			 msg.res.send(JSON.stringify(fs.readdirSync(node.folderpath)));
-			}else{
-			 msg.res.statusCode =  "404";
-			 msg.res.send("<h1>File Not Found: "+filePath+"</h1>");
-			}
+         msg.res.statusCode =  "404";
+         msg.res.send("<h1>File Not Found: "+filePath+"</h1>");
         }
+      }
     });
 }
 
