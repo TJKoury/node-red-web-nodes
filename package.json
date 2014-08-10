@@ -30,9 +30,9 @@
     "nodes": {
       "browserify": "browserify/browserify.js",
       "redis": "redis/redis.js",
-      "http": "http/http_web.js",
       "folder": "dir/folder.js",
-      "deploy": "deploy/deploy.js"
+      "deploy": "deploy/deploy.js",
+      "httpserver":"httpserver/http_server.js"
     }
   }
 }
