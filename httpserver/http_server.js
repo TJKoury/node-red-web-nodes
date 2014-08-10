@@ -43,15 +43,15 @@ function rawBodyParser(req, res, next) {
 }
 
 
-function HTTPInRegex(n)  {
+function HTTPInWeb(n)  {
         RED.nodes.createNode(this,n);
         if (RED.settings.httpNodeRoot !== false) {
 
-            this.url = new RegExp(n.url);
+            this.url = n.regex?new RegExp(n.url):n.url;
+            this.regex = n.regex;
             this.method = n.method;
             this.server =  RED.nodes.getNode(n.server).server;
-            console.log(this.server);
-            
+                  
             var node = this;
 
             this.errorHandler = function(err,req,res,next) {
@@ -108,7 +108,7 @@ function HTTPInRegex(n)  {
             this.warn("Cannot create http-in node when httpNodeRoot set to false");
         }
     }
-RED.nodes.registerType("http in web",HTTPInRegex);
+RED.nodes.registerType("http in web",HTTPInWeb);
 
 function HTTPWebOut(n) {
     RED.nodes.createNode(this,n);
@@ -161,7 +161,7 @@ function HttpServerNode(n) {
             
           if (e.code == 'EADDRINUSE') {
 
-            console.log('err');
+            console.log('Address In Use: '+n.port);
           }
         });
     
