@@ -17,17 +17,19 @@
 var RED = require(process.env.NODE_RED_HOME+"/red/red");
 var mysql = require('mysql');
 var util = require('util');
+var mustache = require('mustache');
 
-function RedisNode(n) {
+function mysqlNode(n) {
     RED.nodes.createNode(this,n);
     
     this.arguments = n.arguments;
     this.command = n.command;
     this.server =  RED.nodes.getNode(n.server);
+    console.log(this.server);
     var node = this;
     this.on("input", function(msg) {
-		
-        server.query(node.command, function(err, rows, fields){
+		console.log(node.server.server);
+        node.server.server.query(mustache.render(node.command, msg), function(err, rows, fields){
             msg.payload = {rows:rows||err,fields:fields};
             node.send(msg);
         });    
@@ -36,20 +38,20 @@ function RedisNode(n) {
 }
 
 
-RED.nodes.registerType("mysql",RedisNode);
+RED.nodes.registerType("mysql",mysqlNode);
 
-function RedisServerNode(n) {
+function mysqlServerNode(n) {
     RED.nodes.createNode(this,n);
-    
+    console.log(n); 
     this.host = n.host;
     this.port = n.port;
-    this.user = n.username;
-    this.password = n.password;
-    this.connectionLimit = n.connectionLimit;
+    this.user = n.un;
+    this.password = n.pw;
+    this.connectionLimit = n.connectionLimit||10;
     
-    this.server =  mysqlConnectionPool.createPool(this);   
-    this.server = mysqlConnectionPool.getConnection();
+    this.server =  mysql.createPool(this);   
+    
 }
 
-RED.nodes.registerType("mysql-server",RedisServerNode);
+RED.nodes.registerType("mysql-server",mysqlServerNode);
 
