@@ -12,7 +12,7 @@
         this.on("input",function(msg) {
 
             var b = browserify({debug:true});
-
+            try{	
                 b.add(node.filein)
                 .bundle({}, function(err, src){
                     if(node.fileout){
@@ -21,7 +21,11 @@
                     }
                     msg.payload = src||err;
                     node.send(msg);
-            });
+                });
+            }catch(e){
+	    	msg.payload = e;
+	    	node.send(msg);
+	    }
 
         });
     }
