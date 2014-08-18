@@ -25,8 +25,13 @@
         <textarea id="node-input-command" style="width: 250px;">        
         </textarea>
     </div>
+     <div class="form-row">
+        <label for="node-input-name"><i class="icon-th"></i> Name</label>
+        <input type="text" id="node-input-name" style="width: 250px;">
+        </input>
+    </div>
     <div class="form-tips" id="command-help">
-        This node allows interaction with a mysql database.  All commands are edited using Mustache-style templates, they are interpreted dynamically based on inputs from the 'msg' input object.<br>
+        This node allows interaction with a mysql database.  All commands are edited using Mustache-style templates, they are interpreted dynamically based on inputs from the 'msg' input object, all values in msg.mysqlescape will be escaped using connection.escape().<br>
     </div>
     <style>
        #node-input-command{
@@ -66,8 +71,9 @@
         category: 'web-storage-output',
         color:"#fffaaa",
         defaults: {
-             server: {value:"", type:"mysql-server"},
+            server: {value:"", type:"mysql-server"},
             command: {value:""},
+            name:{value:""},
             arguments:{value:[], required:true}
         },
         inputs:1,
@@ -75,7 +81,7 @@
         icon: "mysql.png",
         align: "right",
         label: function() {
-            
+            return this.name||this.command||"MySql";
         },
         oneditprepare: function() {
             

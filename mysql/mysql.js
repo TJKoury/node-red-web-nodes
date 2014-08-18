@@ -25,10 +25,15 @@ function mysqlNode(n) {
     this.arguments = n.arguments;
     this.command = n.command;
     this.server =  RED.nodes.getNode(n.server);
-    console.log(this.server);
+    this.name = n.name;
+   
     var node = this;
     this.on("input", function(msg) {
-		console.log(node.server.server);
+		
+        for(var cmd in msg.mysql){
+            msg.mysql[cmd] = node.server.server.escape(msg.mysqlescape[cmd]);
+        };
+        
         node.server.server.query(mustache.render(node.command, msg), function(err, rows, fields){
             msg.payload = {rows:rows||err,fields:fields};
             node.send(msg);
@@ -42,7 +47,7 @@ RED.nodes.registerType("mysql",mysqlNode);
 
 function mysqlServerNode(n) {
     RED.nodes.createNode(this,n);
-    console.log(n); 
+    
     this.host = n.host;
     this.port = n.port;
     this.user = n.un;
