@@ -7,8 +7,6 @@
         RED.nodes.createNode(this,n);
         this.filein = n.filein;
         this.fileout = n.fileout;
-        this.appendNewline = n.appendNewline;
-        this.overwriteFile = n.overwriteFile;
 
         var node = this;
         this.on("input",function(msg) {
@@ -18,9 +16,10 @@
                 b.add(node.filein)
                 .bundle({}, function(err, src){
                     if(node.fileout){
+		    	
                         fs.writeFileSync(node.fileout, src);
                     }
-                    msg.payload = src;
+                    msg.payload = src||err;
                     node.send(msg);
             });
 
