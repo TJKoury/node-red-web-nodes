@@ -14,7 +14,7 @@
             var b = browserify({debug:true});
             try{	
                 b.add(node.filein)
-                .bundle({}, function(err, src){
+                .bundle({debug:true}, function(err, src){
                     if(node.fileout){
 		    	
                         fs.writeFileSync(node.fileout, src);
