@@ -38,7 +38,9 @@ function RedisNode(n) {
         var resolved_arguments = [];
         
         for(var i=0;i<node.arguments.length;i++){
-            resolved_arguments.push(msg.payload[node.arguments[i]]);
+            if(msg.payload[node.arguments[i]]){
+            	resolved_arguments.push(msg.payload[node.arguments[i]]);
+            }
         }
        
         var args = node.command.split(" ");
