@@ -32,7 +32,8 @@
       "redis": "redis/redis.js",
       "folder": "dir/folder.js",
       "deploy": "deploy/deploy.js",
-      "httpserver":"httpserver/http_server.js"
+      "httpserver":"httpserver/http_server.js".
+      "mysql": "mysql/mysql.js"
     }
   }
 }
