@@ -32,6 +32,7 @@
       "redis": "redis/redis.js",
       "folder": "dir/folder.js",
       "deploy": "deploy/deploy.js",
+      "http in regex":"http_regex/http_regex.js",
       "httpserver":"httpserver/http_server.js",
       "mysql": "mysql/mysql.js"
     }
