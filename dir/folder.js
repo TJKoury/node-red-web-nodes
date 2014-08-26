@@ -31,29 +31,21 @@ function FolderNode(n) {
       var file = (n.filepath=="URL")?
       ((msg.req.url==="/")?msg.req.url+node.defaultfile:msg.req.url)
       :msg.payload[node.fileparametername];
-      console.log(file);
       var filePath = "."+decodeURIComponent((node.folderpath+"/"+file).replace(/[\/\/\\\\]{2,}/g,"/").split("?")[0]);
       
       if(fs.existsSync(filePath)&&fs.lstatSync(filePath).isFile()){
-        var i = filePath.lastIndexOf('.');
-        if(i>-1){
-            msg.res.type(filePath.substr(i));    
-        }
-        msg.payload = fs.readFileSync(filePath).toString();
-      
+            msg.res.sendfile(filePath);
       }else{
         if(node.listfiles){
          var listPath = filePath.split("/");
          listPath = listPath.splice(0,listPath.length-1).join("/");
          console.log(listPath);
-         msg.payload = JSON.stringify(fs.readdirSync(listPath));
-    
+         msg.res.send(JSON.stringify(fs.readdirSync(listPath)));
         }else{
          msg.res.statusCode =  "404";
-         msg.payload = "<h1>File Not Found: "+filePath+"</h1>";
+         msg.res.send("<h1>File Not Found: "+filePath+"</h1>");
         }
       }
-      node.send(msg);
     });
 }
 
