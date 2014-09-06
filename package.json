@@ -21,19 +21,19 @@
     "browserify": "^4.2.0",
     "inliner": "^0.1.16",
     "jshint": "^2.5.1",
+    "mysql": "^2.4.3",
     "redis": "^0.10.3",
     "uglifyify": "^2.4.0"
   },
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "node-red": {
     "nodes": {
       "browserify": "browserify/browserify.js",
       "redis": "redis/redis.js",
       "folder": "dir/folder.js",
       "deploy": "deploy/deploy.js",
-      "http in regex":"http_regex/http_regex.js",
-      "httpserver":"httpserver/http_server.js",
+      "http in regex": "http_regex/http_regex.js",
+      "httpserver": "httpserver/http_server.js",
       "mysql": "mysql/mysql.js"
     }
   }
