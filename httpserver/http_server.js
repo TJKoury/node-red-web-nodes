@@ -22,7 +22,7 @@ var urllib = require("url");
 var express = require("express");
 var getBody = require('raw-body');
 var mustache = require("mustache");
-
+var typer  = require('media-typer');
 var cors = require('cors');
 var jsonParser = express.json();
 var urlencParser = express.urlencoded();
@@ -32,9 +32,9 @@ function rawBodyParser(req, res, next) {
     req.body = "";
     req._body = true;
     getBody(req, {
-        limit: '1mb',
+        limit: '50mb',
         length: req.headers['content-length'],
-        encoding: 'utf8'
+        encoding: typer.parse(req.headers['content-type']).parameters.charset
     }, function (err, buf) {
         if (err) return next(err);
         req.body = buf;
