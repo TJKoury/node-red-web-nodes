@@ -25,7 +25,9 @@
     "media-typer": "^0.2.0",
     "mysql": "^2.4.3",
     "redis": "^0.10.3",
-    "uglifyify": "^2.4.0"
+    "soap": "^0.5.1",
+    "uglifyify": "^2.4.0",
+    "xlsx": "^0.7.10"
   },
   "devDependencies": {},
   "node-red": {
