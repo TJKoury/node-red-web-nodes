@@ -49,4 +49,4 @@ function FolderNode(n) {
     });
 }
 
-RED.nodes.registerType("folder out",FolderNode);
+RED.nodes.registerType("folder",FolderNode);
