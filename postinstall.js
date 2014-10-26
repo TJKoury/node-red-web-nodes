@@ -1,4 +1,4 @@
-var fs = require('fs');
+/*var fs = require('fs');
 var assets = require('./assets.js');
 
 assets.files.forEach(function(file_metadata){
@@ -7,4 +7,4 @@ assets.files.forEach(function(file_metadata){
     .pipe(fs.createWriteStream(__dirname+file_metadata.path));
 
 });
-
+*/
