@@ -14,7 +14,7 @@
   limitations under the License.
 -->
 
-<script type="text/x-red" data-template-name="folder out">
+<script type="text/x-red" data-template-name="folder">
     <div class="form-row node-input-folderpath">
          <label for="node-input-folderpath"><i class="icon-file"></i> Path</label>   
          <input type="text" id="node-input-folderpath" placeholder="/">         
@@ -41,13 +41,13 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="folder out">
+<script type="text/x-red" data-help-name="folder">
     <p>Switches the folder path for the file being accessed in the url.</p>
 </script>
 
 <script type="text/javascript">
     
-    RED.nodes.registerType('folder out',{
+    RED.nodes.registerType('folder',{
         category: 'web',
         defaults: {
             folderpath: {value:"/", required:true}, 
