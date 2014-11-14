@@ -29,10 +29,10 @@ var RED = require(process.env.NODE_RED_HOME+"/red/red");
         var node = this;
         
         this.on("input",function(msg) {
-        
+          node.file = (msg.hasOwnProperty("filename"))?msg.filename:node.file;
         
            fs.writeFile(node.file, msg.req.body, function(a){
-            console.log(node.file);
+            
             msg.payload = "Done";
             if(node.redirect){            
                 msg.res.set({
