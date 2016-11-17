@@ -28,19 +28,36 @@ function RedisNode(n) {
     this.server =  RED.nodes.getNode(n.server);
     var client = this.server.server;
     this.on("input", function(msg) {
-		
+	var resolved_arguments = [];
         var rc = function(err, reply){
-          
-		  msg.payload = reply||err;					  
-		  node.send(msg); 
-		}
-        
-        var resolved_arguments = [];
+	  msg.total = {
+		args:msg.payload,
+		reply:(err)?err.toString():reply,
+		arguments:node.arguments,
+		resolved_arguments:resolved_arguments
+	  };
+	  msg.payload = msg.total.reply;					  
+	  node.send(msg); 
+	}
         
         for(var i=0;i<node.arguments.length;i++){
-            if(msg.payload[node.arguments[i]]){
-            	resolved_arguments.push(msg.payload[node.arguments[i]]);
-            }
+          var pargs = node.arguments[i].split(",");
+	  if(node.command === "HMSET" && i===1){
+	    var hmset_args = msg.payload[node.arguments[i]].split(",");
+            hmset_args.forEach(function(hmsetarg,i){
+	      resolved_arguments.push(hmsetarg);
+	    });
+	  }else{
+	    pargs.forEach(function(pargs){
+	      if(msg.payload&msg.payload.hasOwnProperty(parg)){
+	        if(msg.payload[parg].toString().length > 0){
+		  resolved_arguments.push(msg.payload[parg]);
+		
+		}else{
+		  if(parg!==undefined&&parg.toString().length>0)resolved_arguments.push(parg);
+	      }
+	    })
+	  }
         }
        
         var args = node.command.split(" ");
